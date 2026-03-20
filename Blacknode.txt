@@ -1,0 +1,24 @@
+from flask import Flask, render_template
+import os
+
+app = Flask(name)
+
+LOG_FILE = "logs/monitor.log"
+
+def leer_logs():
+    if not os.path.exists(LOG_FILE):
+        return []
+
+    with open(LOG_FILE, "r", encoding="utf-8") as f:
+        lineas = f.readlines()
+
+    return lineas[-20:]
+
+@app.route("/")
+def index():
+    logs = leer_logs()
+    logs.reverse()
+    return render_template("index.html", logs=logs)
+
+if name == "main":
+    app.run(debug=True, host="0.0.0.0", port=5000)
